@@ -1,6 +1,6 @@
 # Task Manager
 
-![Task Manager Logo](logo.png)
+![Task Manager Logo](logo.txt)
 
 ## What does it do?
 
