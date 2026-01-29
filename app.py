@@ -55,7 +55,7 @@ def main():
     manager = TaskManager()
     
     print("Welcome to Task Manager!")
-    print("Commands: add, list, complete, remove, exit")
+    print("Commands: add, list, complete, remove, export, exit")
     
     while True:
         command = input("\nEnter command: ").strip().lower()
@@ -97,8 +97,12 @@ def main():
                 print("Task removed successfully!")
             except ValueError:
                 print("Invalid task ID!")
+        elif command == "export":
+            filename = input("Enter filename (default: tasks.txt): ").strip() or 'tasks.txt'
+            if manager.export_tasks(filename):
+                print(f"Tasks exported to {filename} successfully!")
         else:
-            print("Unknown command. Try: add, list, complete, remove, exit")
+            print("Unknown command. Try: add, list, complete, remove, export, exit")
 
 
 if __name__ == "__main__":
