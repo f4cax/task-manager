@@ -26,13 +26,21 @@ class TaskManager:
                 return task
         return None
     
-    def list_tasks(self):
-        """List all tasks"""
-        if not self.tasks:
+    def list_tasks(self, filter_completed=None, filter_priority=None):
+        """List all tasks with optional filtering"""
+        filtered_tasks = self.tasks
+        
+        if filter_completed is not None:
+            filtered_tasks = [t for t in filtered_tasks if t['completed'] == filter_completed]
+        
+        if filter_priority:
+            filtered_tasks = [t for t in filtered_tasks if t.get('priority', 'medium') == filter_priority]
+        
+        if not filtered_tasks:
             print("No tasks found.")
             return
         
-        for task in self.tasks:
+        for task in filtered_tasks:
             status = "✓" if task['completed'] else "○"
             priority = task.get('priority', 'medium')
             print(f"{status} [{task['id']}] [{priority.upper()}] {task['description']}")
@@ -63,7 +71,16 @@ def main():
             manager.add_task(description, priority)
             print("Task added successfully!")
         elif command == "list":
-            manager.list_tasks()
+            filter_type = input("Filter by (completed/incomplete/priority/all, default: all): ").strip().lower() or 'all'
+            if filter_type == 'completed':
+                manager.list_tasks(filter_completed=True)
+            elif filter_type == 'incomplete':
+                manager.list_tasks(filter_completed=False)
+            elif filter_type == 'priority':
+                priority = input("Enter priority (low/medium/high): ").strip().lower()
+                manager.list_tasks(filter_priority=priority)
+            else:
+                manager.list_tasks()
         elif command == "complete":
             try:
                 task_id = int(input("Enter task ID: "))
